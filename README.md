@@ -470,3 +470,96 @@ find gives a cursor object used to cycle through results
 mongodb shell gives first 20 results
 
  db.passengers.find().forEach((passengerData) => {printjson(passengerData)})
+
+
+ Projections:
+ when you need only some of the data of document(like some columns of a table)
+ db.passengers.find({},{name:1}).toArray();
+[
+  {
+    _id: ObjectId("6397660eaf5a3885970c3280"),
+    name: 'Max Schwarzmueller'
+  },
+  { _id: ObjectId("6397660eaf5a3885970c3281"), name: 'Manu Lorenz' },
+  { _id: ObjectId("6397660eaf5a3885970c3282"), name: 'Chris Hayton' },
+  { _id: ObjectId("6397660eaf5a3885970c3283"), name: 'Sandeep Kumar' },
+  { _id: ObjectId("6397660eaf5a3885970c3284"), name: 'Maria Jones' },
+  {
+    _id: ObjectId("6397660eaf5a3885970c3285"),
+    name: 'Alexandra Maier'
+  },
+  { _id: ObjectId("6397660eaf5a3885970c3286"), name: 'Dr. Phil Evans' },
+  { _id: ObjectId("6397660eaf5a3885970c3287"), name: 'Sandra Brugge' },
+  { _id: ObjectId("6397660eaf5a3885970c3288"), name: 'Elisabeth Mayr' },
+  { _id: ObjectId("6397660eaf5a3885970c3289"), name: 'Frank Cube' },
+  { _id: ObjectId("6397660eaf5a3885970c328a"), name: 'Karandeep Alun' },
+  {
+    _id: ObjectId("6397660eaf5a3885970c328b"),
+    name: 'Michaela Drayer'
+  },
+  {
+    _id: ObjectId("6397660eaf5a3885970c328c"),
+    name: 'Bernd Hoftstadt'
+  },
+  { _id: ObjectId("6397660eaf5a3885970c328d"), name: 'Scott Tolib' },
+  { _id: ObjectId("6397660eaf5a3885970c328e"), name: 'Freddy Melver' },
+  { _id: ObjectId("6397660eaf5a3885970c328f"), name: 'Alexis Bohed' },
+  { _id: ObjectId("6397660eaf5a3885970c3290"), name: 'Melanie Palace' },
+  { _id: ObjectId("6397660eaf5a3885970c3291"), name: 'Armin Glutch' },
+  { _id: ObjectId("6397660eaf5a3885970c3292"), name: 'Klaus Arber' },
+  {
+    _id: ObjectId("6397660eaf5a3885970c3293"),
+    name: 'Albert Twostone'
+  },
+  { _id: ObjectId("6397660eaf5a3885970c3294"), name: 'Gordon Black' }
+]
+
+_id will be by default included in projection but we can exclude it
+db.passengers.find({},{name:1, _id:0}).toArray();
+[
+  { name: 'Max Schwarzmueller' },
+  { name: 'Manu Lorenz' },
+  { name: 'Chris Hayton' },
+  { name: 'Sandeep Kumar' },
+  { name: 'Maria Jones' },
+  { name: 'Alexandra Maier' },
+  { name: 'Dr. Phil Evans' },
+  { name: 'Sandra Brugge' },
+  { name: 'Elisabeth Mayr' },
+  { name: 'Frank Cube' },
+  { name: 'Karandeep Alun' },
+  { name: 'Michaela Drayer' },
+  { name: 'Bernd Hoftstadt' },
+  { name: 'Scott Tolib' },
+  { name: 'Freddy Melver' },
+  { name: 'Alexis Bohed' },
+  { name: 'Melanie Palace' },
+  { name: 'Armin Glutch' },
+  { name: 'Klaus Arber' },
+  { name: 'Albert Twostone' },
+  { name: 'Gordon Black' }
+]
+
+Embedded Documents:
+Nested Documents: One document under another document
+Array in Documents:
+{
+    _id:173,
+    name: "Rahul",
+    details: {
+        age:28,
+        sex: "Male"
+        dob: {
+            day: 22,
+            month: 12,
+            year: 1995
+        }
+    },
+    languages: ["English", "Hindi"]
+}
+
+
+Resetting Data:
+To get rid of your data, you can simply load the database you want to get rid of (use databaseName) and then execute db.dropDatabase().
+
+Similarly, you could get rid of a single collection in a database via db.myCollection.drop().
