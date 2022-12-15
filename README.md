@@ -100,31 +100,48 @@ The following table shows the relationship of RDBMS terminology with MongoDB.
 </tbody>
 </table>
 
-showdbs --- to show all databases
+#### MongoDB Commands
 
-use databaseName --- to use a particular database it even works if database is not there but databse will be created only when we start entering data in database
+<b>showdbs</b> --- to show all databases
+</br>
+<b>use databaseName</b> --- to use a particular database it even works if database is not there but databse will be created only when we start entering data in database
 
-db.flightData.insertOne({"name":"Rahul Chauhan", "salary":10000})
-{
+CMD---> <b>db.flightData.insertOne({"name":"Rahul Chauhan", "salary":10000})</br>
+O/P---> <b>{
 acknowledged: true,
 insertedId: ObjectId("63975c4faf5a3885970c327b")
-}
+}</b>
 
-MongoDB CRUD
-1)Create
-insertOne(data, options)
-insertMany(data, options)
-2)Read
-find()
-find(filter, options)
-findOne(filter, options)
-3)Update
-updateOne(filter, data, options)
-updateMany(filter, data, options)
-replaceOne(filter, data, options)
-4)Delete
-deleteOne(filter, options)
-deleteMany(filter, options)
+#### MongoDB CRUD
+
+<ol>
+<li><b>Create</b>
+<ul>
+<li>insertOne(data, options)</li>
+<li>insertMany(data, options)</li>
+</ul>
+</li>
+<li><b>Read</b>
+<ul>
+<li>find()</li>
+<li>find(filter, options)</li>
+<li>findOne(filter, options)</li>
+</ul>
+</li>
+<li><b>Update</b>
+<ul>
+<li>updateOne(filter, data, options)</li>
+<li>updateMany(filter, data, options)</li>
+<li>replaceOne(filter, data, options)</li>
+</ul>
+</li>
+<li><b>Delete</b>
+<ul>
+<li>deleteOne(filter, options)</li>
+<li>deleteMany(filter, options)</li>
+</ul>
+</li>
+</ol>
 
 db.flightData.find().pretty()
 
