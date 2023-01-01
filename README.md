@@ -106,7 +106,7 @@ The following table shows the relationship of RDBMS terminology with MongoDB.
 </br>
 <b>use databaseName</b> --- to use a particular database it even works if database is not there but databse will be created only when we start entering data in database
 
-CMD---> <b>db.flightData.insertOne({"name":"Rahul Chauhan", "salary":10000})</br>
+CMD---> <b>db.flightData.insertOne({"name":"Rahul Chauhan", "salary":10000})</b>s</br>
 O/P---> <b>{
 acknowledged: true,
 insertedId: ObjectId("63975c4faf5a3885970c327b")
@@ -143,7 +143,7 @@ insertedId: ObjectId("63975c4faf5a3885970c327b")
 </li>
 </ol>
 
-db.flightData.find().pretty()
+<b>db.flightData.find().pretty()</b> ---> to Pretty Print the Output
 
 InsertMany:
 
@@ -678,6 +678,69 @@ To get rid of your data, you can simply load the database you want to get rid of
 
 Similarly, you could get rid of a single collection in a database via db.myCollection.drop().
 
----
+<hr>
 
-Schemas and Relations:
+### Schemas and Relations:
+
+<i>Schema is just a way of storing data.</br>
+However MongoDB does not force to use schema(same structure for each document of a collection) but still when we work on the Enterprise products it is best practise to use light-weigted schema i.e. some keys will be present in all the documents of a collections.
+</i>
+
+#### Data Types
+
+<ul>
+<li>Text</li>
+<li>boolean</li>
+<li>Number
+<ol>
+<li>Integer(int32)</li>
+<li>NumberLong(int64)</li>
+<li>NumberDecimal</li>
+</ol>
+</li>
+<li>ObjectId</li>
+<li>ISODate and Timestamp</li>
+<li>Embedded Document</li>
+<li>Array</li>
+</ul>
+
+ db.companies.insertOne({name:'Fresh Apples Inc', isStartup:true, employees:33, funding:12345678901234567890, details: {ceo:'Marks Super'}, tags:[{title:'super'},{title:'perfect'}], foundingDate: new Date(), insertedAt: new Timestamp()})
+{
+  acknowledged: true,
+  insertedId: ObjectId("63b1a4dfa33bf660599e1cb3")
+}
+
+ db.companies.findOne()
+{
+  _id: ObjectId("63b1a4dfa33bf660599e1cb3"),
+  name: 'Fresh Apples Inc',
+  isStartup: true,
+  employees: 33,
+  funding: 12345678901234567000,  //only 64 bit numbers are allowed
+  details: { ceo: 'Marks Super' },
+  tags: [ { title: 'super' }, { title: 'perfect' } ],
+  foundingDate: ISODate("2023-01-01T15:21:03.256Z"),
+  insertedAt: Timestamp({ t: 1672586463, i: 1 })
+}
+
+
+ db.stats()
+{
+  db: 'companydata',
+  collections: 1,
+  views: 0,
+  objects: 1,
+  avgObjSize: 29,
+  dataSize: 29,
+  storageSize: 20480,
+  indexes: 1,
+  indexSize: 20480,
+  totalSize: 40960,
+  scaleFactor: 1,
+  fsUsedSize: 21635321856,
+  fsTotalSize: 269490393088,
+  ok: 1
+}
+
+typeof db.numbers.findOne().a
+number
