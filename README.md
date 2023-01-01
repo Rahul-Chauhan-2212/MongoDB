@@ -704,43 +704,126 @@ However MongoDB does not force to use schema(same structure for each document of
 <li>Array</li>
 </ul>
 
- db.companies.insertOne({name:'Fresh Apples Inc', isStartup:true, employees:33, funding:12345678901234567890, details: {ceo:'Marks Super'}, tags:[{title:'super'},{title:'perfect'}], foundingDate: new Date(), insertedAt: new Timestamp()})
+db.companies.insertOne({name:'Fresh Apples Inc', isStartup:true, employees:33, funding:12345678901234567890, details: {ceo:'Marks Super'}, tags:[{title:'super'},{title:'perfect'}], foundingDate: new Date(), insertedAt: new Timestamp()})
 {
-  acknowledged: true,
-  insertedId: ObjectId("63b1a4dfa33bf660599e1cb3")
+acknowledged: true,
+insertedId: ObjectId("63b1a4dfa33bf660599e1cb3")
 }
 
- db.companies.findOne()
+db.companies.findOne()
 {
-  _id: ObjectId("63b1a4dfa33bf660599e1cb3"),
-  name: 'Fresh Apples Inc',
-  isStartup: true,
-  employees: 33,
-  funding: 12345678901234567000,  //only 64 bit numbers are allowed
-  details: { ceo: 'Marks Super' },
-  tags: [ { title: 'super' }, { title: 'perfect' } ],
-  foundingDate: ISODate("2023-01-01T15:21:03.256Z"),
-  insertedAt: Timestamp({ t: 1672586463, i: 1 })
+\_id: ObjectId("63b1a4dfa33bf660599e1cb3"),
+name: 'Fresh Apples Inc',
+isStartup: true,
+employees: 33,
+funding: 12345678901234567000, //only 64 bit numbers are allowed
+details: { ceo: 'Marks Super' },
+tags: [ { title: 'super' }, { title: 'perfect' } ],
+foundingDate: ISODate("2023-01-01T15:21:03.256Z"),
+insertedAt: Timestamp({ t: 1672586463, i: 1 })
 }
 
-
- db.stats()
+db.stats()
 {
-  db: 'companydata',
-  collections: 1,
-  views: 0,
-  objects: 1,
-  avgObjSize: 29,
-  dataSize: 29,
-  storageSize: 20480,
-  indexes: 1,
-  indexSize: 20480,
-  totalSize: 40960,
-  scaleFactor: 1,
-  fsUsedSize: 21635321856,
-  fsTotalSize: 269490393088,
-  ok: 1
+db: 'companydata',
+collections: 1,
+views: 0,
+objects: 1,
+avgObjSize: 29,
+dataSize: 29,
+storageSize: 20480,
+indexes: 1,
+indexSize: 20480,
+totalSize: 40960,
+scaleFactor: 1,
+fsUsedSize: 21635321856,
+fsTotalSize: 269490393088,
+ok: 1
 }
 
 typeof db.numbers.findOne().a
 number
+
+##### Relations
+
+<ul>
+<li><h3>One to One Relation</h3>
+<h4>Embedded Documents</h4>
+Patient <--> Summary
+
+use hospital
+switched to db hospital
+db.patients.insertOne({name:"Rahul", age:28, diseaseSummary:"summary-rahul-1"})
+{
+acknowledged: true,
+insertedId: ObjectId("63b1ac4ba33bf660599e1cb5")
+}
+
+db.patients.findOne()
+{
+\_id: ObjectId("63b1ac4ba33bf660599e1cb5"),
+name: 'Rahul',
+age: 28,
+diseaseSummary: 'summary-rahul-1'
+}
+db.diseaseSummaries.insertOne({\_id:"summary-rahul-1",diseases:["cold","fever"]})
+{ acknowledged: true, insertedId: 'summary-rahul-1' }
+
+db.diseaseSummaries.findOne()
+{ \_id: 'summary-rahul-1', diseases: [ 'cold', 'fever' ] }
+
+var dsid = db.patients.findOne().diseaseSummary
+dsid
+summary-rahul-1
+
+db.diseaseSummaries.find({\_id:dsid})
+[ { \_id: 'summary-rahul-1', diseases: [ 'cold', 'fever' ] } ]
+
+Here there is strong one to one relationship if we use the above approach it would cost heavier to achieve all data. So here we should use embedded documents.
+db.patients.deleteMany({name:"Rahul"})
+{ acknowledged: true, deletedCount: 1 }
+
+db.patients.insertOne({name:"Rahul", age:28, diseaseSummary: {diseases:["cold","fever"]}})
+{
+acknowledged: true,
+insertedId: ObjectId("63b1b18ba33bf660599e1cb6")
+}
+
+db.patients.findOne()
+{
+\_id: ObjectId("63b1b18ba33bf660599e1cb6"),
+name: 'Rahul',
+age: 28,
+diseaseSummary: { diseases: [ 'cold', 'fever' ] }
+}
+
+<h4>References</h4>
+Person<-->Car
+suppose we don't want the car data
+
+use carData
+switched to db carData
+
+db.persons.insertOne({name:"Rahul", car:{model:"BMW", price:40000}})
+{
+acknowledged: true,
+insertedId: ObjectId("63b1b243a33bf660599e1cb7")
+}
+
+db.persons.deleteMany({name:"Rahul"})
+{ acknowledged: true, deletedCount: 1 }
+
+db.persons.insertOne({name:"Rahul",age:28, salary:30000})
+{
+acknowledged: true,
+insertedId: ObjectId("63b1b2f7a33bf660599e1cb8")
+}
+
+db.cars.insertOne({model:"BMW", price:40000, owner:ObjectId("63b1b2f7a33bf660599e1cb8")})
+{
+acknowledged: true,
+insertedId: ObjectId("63b1b340a33bf660599e1cb9")
+}
+
+</li>
+</ul>
